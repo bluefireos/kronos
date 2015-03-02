@@ -6,5 +6,6 @@
 
 int main(int argc, char **argv){
   kronos_processConfig(argv[1], "kronos");
+  printf("%d\n", kronos_get_logLevelFromIndex(1));
   return 0;
 }

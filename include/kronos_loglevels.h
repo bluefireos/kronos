@@ -23,7 +23,7 @@
   } KRONOS_logLevel;
 
 #if 1
-  const char **kronos_logLevelStrings = {
+  const char *kronos_logLevelStrings[] = {
     "KRONOS_FATAL",
     "KRONOS_ERROR",
     "KRONOS_WARNING",

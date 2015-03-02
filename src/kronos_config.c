@@ -6,10 +6,14 @@
 
 #include "kronos_error.h"
 #include "kronos_types.h"
+//#include "kronos_list.h"
 #include "kronos_loglevels.h"
 #include "kronos_config.h"
 
 #define MAX_BUFFER_SIZE 128
+
+#define list_for_each(pos, head)           \
+  for (pos = head; NULL != pos; pos = pos->next)
 
 typedef struct ConfigNode{
   unsigned int index;
@@ -19,7 +23,7 @@ typedef struct ConfigNode{
 } ConfigNode;
 
 static pthread_mutex_t configMutex = PTHREAD_MUTEX_INITIALIZER;
-static ConfigNode *config = NULL;
+static ConfigNode *m_config = NULL;
 
 
 static void dump_nodes( ConfigNode *head){
@@ -42,8 +46,18 @@ static unsigned int get_logLevel(GKeyFile *configFile, const char *group,
   }
   
   while (i < MAX_LOG_LEVELS){
-      printf("#########\n");
-    if (0 == strcmp(value, kronos_logLevelStrings[i])){
+    //checking for the global flag enableLog
+    if (!strcmp(key, "enableLog")){
+      if(!strcasecmp(value, "TRUE"))
+        return 1;
+      else if(!strcasecmp(value, "FALSE"))
+        return 0;
+      else
+        return KRONOS_INVALID_LEVEL;
+    }
+
+    //Checking for log-Levels for different modules
+    if (!strcasecmp(value, kronos_logLevelStrings[i])){
       return i;
     }
     i++;
@@ -60,7 +74,6 @@ static ConfigNode *get_config(GKeyFile *configFile, const char *group,
     ConfigNode *node = (ConfigNode *)malloc(sizeof(ConfigNode));
     node->index = i;
     node->mod = strdup(keys[i]);
-    printf("$$$$$$$\n");
     
     node->logLevel = get_logLevel(configFile, group, keys[i]);
 
@@ -72,6 +85,36 @@ static ConfigNode *get_config(GKeyFile *configFile, const char *group,
   return nodes;
 }
 
+/*----------------------------------------------------------------------------*/
+
+unsigned int kronos_get_indexFromMod(const char *mod){
+  ConfigNode *node = NULL;
+  list_for_each(node, m_config){
+    if(!strcasecmp(mod, node->mod)){
+      return node->index;    
+      }
+  }
+  return 0;
+}
+unsigned int kronos_get_logLevelFromMod(const char *mod){
+  ConfigNode *node = NULL;
+  list_for_each(node, m_config){
+    if(!strcasecmp(mod, node->mod)){
+      return node->logLevel;
+    }
+  }
+  return KRONOS_INVALID_LEVEL;
+}
+
+unsigned int kronos_get_logLevelFromIndex(unsigned int index){
+  ConfigNode *node = NULL;
+  list_for_each(node, m_config){
+    if (node->index == index){
+      return node->logLevel;
+    }
+  }
+  return KRONOS_INVALID_LEVEL;
+}
 
 KRONOS_RET kronos_processConfig(const char *configFile, const char *group){
   GKeyFile *confFile = NULL;
@@ -93,10 +136,11 @@ KRONOS_RET kronos_processConfig(const char *configFile, const char *group){
     g_key_file_free(confFile);
     return KRONOS_FAILED;
   }
-  config = get_config(confFile, group, keys, size);
-  dump_nodes(config);
+  m_config = get_config(confFile, group, keys, size);
+  dump_nodes(m_config);
 
   g_strfreev(keys);
   g_key_file_free(confFile);
   pthread_mutex_unlock(&configMutex);
+  return KRONOS_SUCCESS;
 }
