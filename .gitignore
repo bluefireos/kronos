@@ -1,4 +1,6 @@
 *.o
 *.so
+*.out
+*.d
 ./build/lib/*
 .build/test/*
