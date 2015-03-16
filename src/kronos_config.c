@@ -6,7 +6,6 @@
 
 #include "kronos_error.h"
 #include "kronos_types.h"
-//#include "kronos_list.h"
 #include "kronos_loglevels.h"
 #include "kronos_config.h"
 
@@ -85,7 +84,7 @@ static ConfigNode *get_config(GKeyFile *configFile, const char *group,
   return nodes;
 }
 
-/*----------------------------------------------------------------------------*/
+/*---------------------------- Public Functions ------------------------------*/
 
 unsigned int kronos_get_indexFromMod(const char *mod){
   ConfigNode *node = NULL;
@@ -114,6 +113,16 @@ unsigned int kronos_get_logLevelFromIndex(unsigned int index){
     }
   }
   return KRONOS_INVALID_LEVEL;
+}
+
+char* kronos_get_modFromIndex(unsigned int index){
+  ConfigNode *node = NULL;
+  list_for_each(node, m_config){
+    if (node->index == index){
+      return node->mod;
+    }
+  }
+  return NULL;
 }
 
 KRONOS_RET kronos_processConfig(const char *configFile, const char *group){

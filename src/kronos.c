@@ -1,4 +1,8 @@
-
+/*
+ *  Part of BFOS(Elixir) project
+ *  Author: Johan Saji
+ *  Module: Kronos
+ */
 #include <log4c.h>
 
 #include "logger_pvt.h"

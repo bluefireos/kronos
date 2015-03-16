@@ -1,8 +1,6 @@
 #ifndef KRONOS_LOGLEVEL_H
 #define KRONOS_LOGLEVEL_H
 
-
-
 /******************************************************************************
  * Log format:
  *  {2014-12-24 03:29:51:201 [FATAL][COM.MOD][1000][FUNCTION:123] The actual message goes here.}
