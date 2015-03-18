@@ -1,5 +1,5 @@
 
-include ../Makefile.config
+include ../Makefile.conf
 
 
 types: types_test.cpp 

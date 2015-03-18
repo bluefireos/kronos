@@ -19,11 +19,12 @@ extern KRONOS_RET kronos_initLayouts();
 /*============================================================================*/
 
 static kronos_bool initLogger(){
-  kronos_bool ret = K_FALSE;
   if (KRONOS_SUCCESS != kronos_initAppenders()){
     return KRONOS_FAILED;
   }
-  kronos_initLayouts();
+  if (KRONOS_SUCCESS != kronos_initLayouts()){
+    return KRONOS_FAILED;
+  }
   return K_TRUE;
 }
 
@@ -32,6 +33,9 @@ static KRONOS_RET kronos_logInit(){
   static kronos_bool initialized = K_FALSE;
   if (!initialized){
     initialized = initLogger();
+    initialized = K_TRUE;
+    log4c_init();
+    printf("log4c init\n");
   }
 
   return ret;

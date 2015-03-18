@@ -24,7 +24,7 @@
 	<appender name="stderr" type="stream" layout="dated"/>
 	<appender name="syslog" type="syslog" layout="basic"/>
   <!-- Add new appender here -->
-	<appender name="modulefile.txt" type="test_appender" prefix="ocapri_log.txt" layout="test_template"/>
+	<appender name="modulefile.txt" type="kronos_appender" prefix="ocapri_log.txt" layout="kronos_layout"/>
 
 	<layout name="basic" type="basic"/>
 	<layout name="dated" type="dated"/>
