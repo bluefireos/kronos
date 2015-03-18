@@ -20,8 +20,8 @@
     KRONOS_LAST_LOG  //Not to be used. Kept there for getting the count
   } KRONOS_logLevel;
 
-#if 1
-  const char *kronos_logLevelStrings[] = {
+#if defined(KRONOS_LOG_STRING)
+  extern const char *kronos_logLevelStrings[] = {
     "KRONOS_FATAL",
     "KRONOS_ERROR",
     "KRONOS_WARNING",
