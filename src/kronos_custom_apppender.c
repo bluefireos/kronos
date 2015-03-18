@@ -4,6 +4,7 @@
  *  Module: Kronos
  */
 
+#include <stdlib.h>
 #include <string.h>
 #include <log4c/appender.h>
 #include "kronos_error.h"
@@ -29,6 +30,7 @@ static int kronos_appender_open(log4c_appender_t* this){
 
   setbuf(fp, NULL);
   log4c_appender_set_udata(this, fp);
+  free(logFileName);
   return 0;
 }
 
@@ -42,7 +44,7 @@ static int kronos_appender_append(log4c_appender_t* this,
 
 static int kronos_appender_close(log4c_appender_t* this){
   FILE *fp = (FILE *)log4c_appender_get_udata(this);
-  return fp ? close(fp) : 0;
+  return fp ? fclose(fp) : 0;
 }
 
 

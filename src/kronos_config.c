@@ -91,7 +91,7 @@ static ConfigNode *get_config(GKeyFile *configFile, const char *group,
 
 /*---------------------------- Public Functions ------------------------------*/
 
-unsigned int kronos_get_indexFromMod(const char *mod){
+uint8_t kronos_get_indexFromMod(const char *mod){
   ConfigNode *node = NULL;
   list_for_each(node, m_config){
     if(!strcasecmp(mod, node->mod)){
@@ -100,7 +100,8 @@ unsigned int kronos_get_indexFromMod(const char *mod){
   }
   return 0;
 }
-unsigned int kronos_get_logLevelFromMod(const char *mod){
+
+uint8_t kronos_get_logLevelFromMod(const char *mod){
   ConfigNode *node = NULL;
   list_for_each(node, m_config){
     if(!strcasecmp(mod, node->mod)){
@@ -110,7 +111,7 @@ unsigned int kronos_get_logLevelFromMod(const char *mod){
   return KRONOS_INVALID_LEVEL;
 }
 
-unsigned int kronos_get_logLevelFromIndex(unsigned int index){
+uint8_t kronos_get_logLevelFromIndex(unsigned int index){
   ConfigNode *node = NULL;
   list_for_each(node, m_config){
     if (node->index == index){

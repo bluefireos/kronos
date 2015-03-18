@@ -2,6 +2,7 @@
 #define KRONOS_H
 
 #include "kronos_error.h"
+#include "kronos_loglevels.h"
 
 #ifdef __cplusplus
 extern "C"
