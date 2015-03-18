@@ -1,7 +1,45 @@
+/*
+ *  Part of BFOS(Elixir) project
+ *  Author: Johan Saji
+ *  Module: Kronos
+ */
 
-#define DEFAULT_LOG_DIR ./
+#include <string.h>
+
+#define DEFAULT_LOG_DIR "./"
 
 static int kronos_appender_open(log4c_appender_t* this){
+  char *logFileName = NULL;
+  FILE *fp = (FILE *)log4c_appender_get_udata(this);
+  if (fp){
+    return 0;
+  }
+  
+  logFileName = strdup(log4c_appender_get_name(this));
+  logFileName = strcat(DEFAULT_LOG_DIR, logFileName);
+
+  fp = fopen(logFileName, "w");
+  if (NULL == fp){
+    fprintf(stderr,"Unable to open the Logfile %s ....\n", logFileName);
+    fp = stderr;
+  }
+
+  setbuf(fp, NULL);
+  log4c_appender_set_udata(this, fp);
+  return 0;
+}
+
+static int kronos_appender_append(log4c_appender_t* this, 
+     const log4c_logging_event_t* event){
+  FILE *fp = (FILE *)log4c_appender_get_udata(this);
+  fprintf(fp, "%s\n",event->evt_rendered_msg);
+  fflush(fp);
+  return 0;
+}
+
+static int kronos_appender_close(log4c_appender_t* this){
+  FILE *fp = (FILE *)log4c_appender_get_udata(this);
+  return fp ? close(fp) : 0;
 }
 
 

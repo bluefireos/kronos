@@ -2,6 +2,7 @@ include Makefile.config
 
 .PHONY: test
 
+
 all: $(LIB_DIR)
 	@echo $(LIB_NAME)
 

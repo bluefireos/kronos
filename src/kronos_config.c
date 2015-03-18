@@ -1,3 +1,8 @@
+/*
+ *  Part of BFOS(Elixir) project
+ *  Author: Johan Saji
+ *  Module: Kronos
+ */
 
 #include <stdio.h>
 #include <string.h>
