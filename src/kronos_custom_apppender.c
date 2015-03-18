@@ -5,6 +5,9 @@
  */
 
 #include <string.h>
+#include <log4c/appender.h>
+#include "kronos_error.h"
+
 
 #define DEFAULT_LOG_DIR "./"
 
