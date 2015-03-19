@@ -21,7 +21,7 @@
   } KRONOS_logLevel;
 
 #if defined(KRONOS_LOG_STRING)
-  extern const char *kronos_logLevelStrings[] = {
+  const char *kronos_logLevelStrings[] = {
     "KRONOS_FATAL",
     "KRONOS_ERROR",
     "KRONOS_WARNING",

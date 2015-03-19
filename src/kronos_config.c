@@ -27,6 +27,8 @@ typedef struct ConfigNode{
   struct ConfigNode *next;
 } ConfigNode;
 
+static kronos_bool logEnabled = K_FALSE;
+
 static pthread_mutex_t configMutex = PTHREAD_MUTEX_INITIALIZER;
 static ConfigNode *m_config = NULL;
 
@@ -53,8 +55,10 @@ static unsigned int get_logLevel(GKeyFile *configFile, const char *group,
   while (i < MAX_LOG_LEVELS){
     //checking for the global flag enableLog
     if (!strcmp(key, "enableLog")){
-      if(!strcasecmp(value, "TRUE"))
+      if(!strcasecmp(value, "TRUE")){
+        logEnabled = K_TRUE;
         return 1;
+      }
       else if(!strcasecmp(value, "FALSE"))
         return 0;
       else
@@ -159,4 +163,8 @@ KRONOS_RET kronos_processConfig(const char *configFile, const char *group){
   g_key_file_free(confFile);
   pthread_mutex_unlock(&configMutex);
   return KRONOS_SUCCESS;
+}
+
+kronos_bool kronos_isLogEnabled(){
+  return logEnabled;
 }

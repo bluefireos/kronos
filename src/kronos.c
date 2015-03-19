@@ -3,6 +3,7 @@
  *  Author: Johan Saji
  *  Module: Kronos
  */
+#include <stdarg.h>
 #include <log4c.h>
 
 #include "kronos_error.h"
@@ -41,8 +42,43 @@ static KRONOS_RET kronos_logInit(){
   return ret;
 }
 
+static log4c_category_t* cachedCategory[100] = {NULL};
 
+static void log_message(KRONOS_logLevel level, const char * module,
+    const char *format, va_list message){
+  int moduleIndex = kronos_get_indexFromMod(module);
+  if(NULL == cachedCategory[moduleIndex]){
+    cachedCategory[moduleIndex] = log4c_category_get(module);
+  }
 
+  switch(level){
+    case KRONOS_FATAL:
+      log4c_category_log(cachedCategory[moduleIndex], LOG4C_PRIORITY_FATAL, format, message);
+      break;
+    case KRONOS_ERROR:
+      log4c_category_log(cachedCategory[moduleIndex], LOG4C_PRIORITY_ERROR, format, message);
+      break;
+    case KRONOS_WARNING:
+      log4c_category_log(cachedCategory[moduleIndex], LOG4C_PRIORITY_WARN, format, message);
+      break;
+    case KRONOS_NOTICE:
+      log4c_category_log(cachedCategory[moduleIndex], LOG4C_PRIORITY_NOTICE, format, message);
+      break;
+    case KRONOS_INFO:
+      log4c_category_log(cachedCategory[moduleIndex], LOG4C_PRIORITY_INFO, format, message);
+      break;
+    case KRONOS_DEBUG:
+      log4c_category_log(cachedCategory[moduleIndex], LOG4C_PRIORITY_DEBUG, format, message);
+      break;
+    case KRONOS_TRACE:
+    case KRONOS_TRACE1:
+    case KRONOS_TRACE2:
+    case KRONOS_TRACE3:
+      log4c_category_log(cachedCategory[moduleIndex], LOG4C_PRIORITY_TRACE, format, message);
+      break;
+  }
+
+}
 
 /*============================================================================*/
 /*
@@ -64,7 +100,15 @@ KRONOS_RET kronos_init(const char *config_file){
   return ret;
 }
 
-void kronos_log(KRONOS_logLevel level, const char * module,
-                const char * message, ...){
-                
+void  kronos_log(KRONOS_logLevel level, const char * module,
+    const char * message, ...){
+  va_list args;
+  va_start(args, message);
+
+  if(kronos_isLogEnabled()){
+      if (level <= kronos_get_logLevelFromMod(module)){
+        log_message(level, module, message, args);
+      }
+  }
+  va_end(args);
 }

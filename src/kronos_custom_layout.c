@@ -14,8 +14,12 @@
 #include <log4c/layout.h>
 #include "kronos_error.h"
 
+#define YEAR_OFFSET 1900
+#define MONTH_OFFSET 1
+
 static const char* kronos_default_format(const log4c_layout_t* a_layout,
     const log4c_logging_event_t*a_event){
+  printf("%s\n", __FUNCTION__);
   struct tm time;
   
   pid_t threadID = syscall(SYS_gettid);
@@ -23,8 +27,9 @@ static const char* kronos_default_format(const log4c_layout_t* a_layout,
   //[YYYY:MM:DD HH:MM:SS][FATAL][COM.MOD][TID][FUNCTION:123] The actual message goes here.
   snprintf(a_event->evt_buffer.buf_data, a_event->evt_buffer.buf_size,
       "[%04d:%02d:%02d %02d:%02d:%02d][%-5s][%s][%d]%s",
-      time.tm_year, time.tm_mon, time.tm_mday, time.tm_hour, time.tm_min,
-      time.tm_sec, log4c_priority_to_string(a_event->evt_priority),
+      time.tm_year + YEAR_OFFSET, time.tm_mon + MONTH_OFFSET, time.tm_mday, 
+      time.tm_hour, time.tm_min, time.tm_sec, 
+      log4c_priority_to_string(a_event->evt_priority),
       a_event->evt_category, threadID, a_event->evt_msg);
 
   return a_event->evt_buffer.buf_data;  
@@ -43,6 +48,7 @@ static const log4c_layout_type_t *log4c_kronos_layouts[] = {
 
 
 KRONOS_RET kronos_initLayouts(){
+  printf("%s\n", __FUNCTION__);
   int i = 0;
   int nLayouts = (int)(sizeof(log4c_kronos_layouts)/
                          sizeof(log4c_kronos_layouts[0]));

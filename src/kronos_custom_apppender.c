@@ -13,6 +13,7 @@
 #define DEFAULT_LOG_DIR "./"
 
 static int kronos_appender_open(log4c_appender_t* this){
+  printf("%s\n", __FUNCTION__);
   char *logFileName = NULL;
   FILE *fp = (FILE *)log4c_appender_get_udata(this);
   if (fp){
@@ -20,8 +21,9 @@ static int kronos_appender_open(log4c_appender_t* this){
   }
   
   logFileName = strdup(log4c_appender_get_name(this));
-  logFileName = strcat(DEFAULT_LOG_DIR, logFileName);
+//  logFileName = strcat(DEFAULT_LOG_DIR, logFileName);
 
+  printf("%s\n", logFileName);
   fp = fopen(logFileName, "w");
   if (NULL == fp){
     fprintf(stderr,"Unable to open the Logfile %s ....\n", logFileName);
@@ -36,6 +38,7 @@ static int kronos_appender_open(log4c_appender_t* this){
 
 static int kronos_appender_append(log4c_appender_t* this, 
      const log4c_logging_event_t* event){
+  printf("%s\n", __FUNCTION__);
   FILE *fp = (FILE *)log4c_appender_get_udata(this);
   fprintf(fp, "%s\n",event->evt_rendered_msg);
   fflush(fp);
@@ -43,6 +46,7 @@ static int kronos_appender_append(log4c_appender_t* this,
 }
 
 static int kronos_appender_close(log4c_appender_t* this){
+  printf("%s\n", __FUNCTION__);
   FILE *fp = (FILE *)log4c_appender_get_udata(this);
   return fp ? fclose(fp) : 0;
 }
@@ -64,6 +68,7 @@ static const log4c_appender_type_t *log4c_kronos_appenders[] = {
 
 
 KRONOS_RET kronos_initAppenders(){
+  printf("%s\n", __FUNCTION__);
   int i = 0;
   int nAppenders = (int)(sizeof(log4c_kronos_appenders)/
                          sizeof(log4c_kronos_appenders[0]));

@@ -8,5 +8,6 @@ uint8_t kronos_get_logLevelFromIndex(unsigned int);
 uint8_t kronos_get_logLevelFromMod(const char *);
 uint8_t kronos_get_indexFromMod(const char *);
 char* kronos_get_modFromIndex(unsigned int);
+kronos_bool kronos_isLogEnabled();
 
 #endif //KRONOS_CONFIG_H
