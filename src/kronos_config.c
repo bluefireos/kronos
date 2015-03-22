@@ -51,7 +51,7 @@ static unsigned int get_logLevel(GKeyFile *configFile, const char *group,
   if (NULL == value){
     return KRONOS_INVALID_LEVEL;
   }
-  
+ 
   while (i < MAX_LOG_LEVELS){
     //checking for the global flag enableLog
     if (!strcmp(key, "enableLog")){
@@ -85,7 +85,6 @@ static ConfigNode *get_config(GKeyFile *configFile, const char *group,
     node->mod = strdup(keys[i]);
     
     node->logLevel = get_logLevel(configFile, group, keys[i]);
-
     // Adding new node to the begining of the list
     node->next = nodes;
     nodes = node;

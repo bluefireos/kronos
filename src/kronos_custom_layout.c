@@ -19,7 +19,6 @@
 
 static const char* kronos_default_format(const log4c_layout_t* a_layout,
     const log4c_logging_event_t*a_event){
-  printf("%s\n", __FUNCTION__);
   struct tm time;
   
   pid_t threadID = syscall(SYS_gettid);
@@ -48,7 +47,6 @@ static const log4c_layout_type_t *log4c_kronos_layouts[] = {
 
 
 KRONOS_RET kronos_initLayouts(){
-  printf("%s\n", __FUNCTION__);
   int i = 0;
   int nLayouts = (int)(sizeof(log4c_kronos_layouts)/
                          sizeof(log4c_kronos_layouts[0]));

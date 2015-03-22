@@ -36,7 +36,6 @@ static KRONOS_RET kronos_logInit(){
     initialized = initLogger();
     initialized = K_TRUE;
     log4c_init();
-    printf("log4c init\n");
   }
 
   return ret;
@@ -51,33 +50,7 @@ static void log_message(KRONOS_logLevel level, const char * module,
     cachedCategory[moduleIndex] = log4c_category_get(module);
   }
 
-  switch(level){
-    case KRONOS_FATAL:
-      log4c_category_log(cachedCategory[moduleIndex], LOG4C_PRIORITY_FATAL, format, message);
-      break;
-    case KRONOS_ERROR:
-      log4c_category_log(cachedCategory[moduleIndex], LOG4C_PRIORITY_ERROR, format, message);
-      break;
-    case KRONOS_WARNING:
-      log4c_category_log(cachedCategory[moduleIndex], LOG4C_PRIORITY_WARN, format, message);
-      break;
-    case KRONOS_NOTICE:
-      log4c_category_log(cachedCategory[moduleIndex], LOG4C_PRIORITY_NOTICE, format, message);
-      break;
-    case KRONOS_INFO:
-      log4c_category_log(cachedCategory[moduleIndex], LOG4C_PRIORITY_INFO, format, message);
-      break;
-    case KRONOS_DEBUG:
-      log4c_category_log(cachedCategory[moduleIndex], LOG4C_PRIORITY_DEBUG, format, message);
-      break;
-    case KRONOS_TRACE:
-    case KRONOS_TRACE1:
-    case KRONOS_TRACE2:
-    case KRONOS_TRACE3:
-      log4c_category_log(cachedCategory[moduleIndex], LOG4C_PRIORITY_TRACE, format, message);
-      break;
-  }
-
+  log4c_category_log(cachedCategory[moduleIndex], (level * 100), format, message);
 }
 
 /*============================================================================*/

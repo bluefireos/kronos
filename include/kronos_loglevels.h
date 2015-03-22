@@ -7,31 +7,29 @@
  ******************************************************************************/
 
   typedef enum {
-    KRONOS_FATAL = 0,
-    KRONOS_ERROR,
-    KRONOS_WARNING,
-    KRONOS_NOTICE,
-    KRONOS_INFO,
-    KRONOS_DEBUG,
-    KRONOS_TRACE,
-    KRONOS_TRACE1,
-    KRONOS_TRACE2,
-    KRONOS_TRACE3,
-    KRONOS_LAST_LOG  //Not to be used. Kept there for getting the count
+    KRONOS_FATAL    = 0,
+    KRONOS_ALERT    = 1,
+    KRONOS_CRIT     = 2,
+    KRONOS_ERROR    = 3,
+    KRONOS_WARNING  = 4,
+    KRONOS_NOTICE   = 5,
+    KRONOS_INFO     = 6,
+    KRONOS_DEBUG    = 7,
+    KRONOS_TRACE    = 8,
+    KRONOS_LAST_LOG = 9  //Not to be used. Kept there for getting the count
   } KRONOS_logLevel;
 
 #if defined(KRONOS_LOG_STRING)
   const char *kronos_logLevelStrings[] = {
-    "KRONOS_FATAL",
-    "KRONOS_ERROR",
-    "KRONOS_WARNING",
-    "KRONOS_NOTICE",
-    "KRONOS_INFO",
-    "KRONOS_DEBUG",
-    "KRONOS_TRACE",
-    "KRONOS_TRACE1",
-    "KRONOS_TRACE2",
-    "KRONOS_TRACE3"
+    "FATAL",
+    "ALERT",
+    "CRITIC",
+    "ERROR",
+    "WARNING",
+    "NOTICE",
+    "INFO",
+    "DEBUG",
+    "TRACE",
   };
 #endif
 
