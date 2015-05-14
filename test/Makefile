@@ -1,9 +1,24 @@
-
 include ../Makefile.conf
 
 
-types: types_test.cpp 
-	$(CC) $^ -o ../$(TEST_DIR)/$@ -I../include $(CFLAGS)
+SRC_DIR    = ./
+INC_DIR    = ./
 
-config: config_test.c
-	$(CC) $^ ../src/kronos_config.c -I../include/ -I$(ROOTFS)/include/glib-2.0/ -I$(ROOTFS)/lib/glib-2.0/include/ -L$(ROOTFS)/lib/ -lglib-2.0 $(CFLAGS)
+SRCS       = config_test.c  \
+             test_appender.c  \
+             test_kronos.c
+
+KRONOS_LIB = -L../build/lib -lkronos
+KRONOS_INC = -I../include
+
+################################################################################
+INCLUDE   += $(KRONOS_INC)
+LFLAGS    += $(KRONOS_LIB)
+
+all: kronos_test
+	@echo "--- $^ Build completed ---"
+	@echo "For rebuilding :-  make clean && make"
+
+kronos_test: test_kronos.c
+	@echo "[CC] Building $@..."
+	@$(CC) -o $@ $^ $(CFLAGS) $(INCLUDE) $(LFLAGS) $(KRONOS_LIB)

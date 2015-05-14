@@ -8,6 +8,7 @@
 #include <string.h>
 #include <glib.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 #include "kronos_error.h"
 #include "kronos_types.h"
@@ -23,7 +24,7 @@
 typedef struct ConfigNode{
   unsigned int index;
   char *mod;
-  unsigned int logLevel;
+  uint16_t logLevel;
   struct ConfigNode *next;
 } ConfigNode;
 
@@ -35,35 +36,91 @@ static ConfigNode *m_config = NULL;
 
 static void dump_nodes( ConfigNode *head){
   while (NULL != head){
-    printf("%d %-7s %d\n", head->index, head->mod, head->logLevel);
+    printf("%d %-7s %x\n", head->index, head->mod, head->logLevel);
     head = head->next; 
   }
 }
 
+/*static char *firstChar(char *logString){
+  char *startPointer = logString;
+  while (' ' == *startPointer){
+    startPointer++;
+  }
+  return startPointer;
+}*/
 
-static unsigned int get_logLevel(GKeyFile *configFile, const char *group,
+static char *endChar(char *logString){
+  int length = strlen(logString);
+  char *startPointer = logString;
+  char *endPointer = logString + length - 1;
+  if (0 == length){
+    return NULL;
+  }
+
+  while(' ' == *endPointer || '\0' == *endPointer){
+    if(endPointer == startPointer)
+      return NULL;
+    endPointer--;
+  }
+  return endPointer;
+}
+
+static uint16_t processLogLevel(char* logString){
+  char *traversePointer;
+  char *endPointer;
+  uint16_t logLevel = 0;
+
+  traversePointer = logString;
+  endPointer = endChar(traversePointer);
+  while(endPointer > traversePointer){
+    int i = 0;
+    int word_length;
+    char *space = strchr(traversePointer, ' ');
+    if(NULL == space){
+      space = endPointer + 1;
+    }
+    word_length = space - traversePointer;
+    if( 5 > word_length){
+      traversePointer = space + 1;
+      continue;
+    }
+    while (i < MAX_LOG_LEVELS){
+      //Checking for log-Levels for different modules
+      if (!strncasecmp(traversePointer, kronos_logLevelStrings[i], word_length)){
+        logLevel |= (1 << i);
+      }
+      i++;
+    }
+    traversePointer = space + 1;
+  }
+
+  return logLevel;
+}
+
+static uint16_t get_logLevel(GKeyFile *configFile, const char *group,
                 gchar *key){
   GError *error = NULL;
   char *value = NULL;
-  int i = 0;
 
   value = g_key_file_get_value(configFile, group, key, &error);
   if (NULL == value){
     return KRONOS_INVALID_LEVEL;
   }
- 
-  while (i < MAX_LOG_LEVELS){
     //checking for the global flag enableLog
-    if (!strcmp(key, "enableLog")){
-      if(!strcasecmp(value, "TRUE")){
-        logEnabled = K_TRUE;
-        return 1;
-      }
-      else if(!strcasecmp(value, "FALSE"))
-        return 0;
-      else
-        return KRONOS_INVALID_LEVEL;
+  if (!strcmp(key, "enableLog")){
+    if(!strcasecmp(value, "TRUE")){
+      logEnabled = K_TRUE;
+      return 1;
     }
+    else if(!strcasecmp(value, "FALSE"))
+      return 0;
+    else
+      return KRONOS_INVALID_LEVEL;
+  }
+ 
+  return processLogLevel(value);
+#if 0
+  while (i < MAX_LOG_LEVELS){
 
     //Checking for log-Levels for different modules
     if (!strcasecmp(value, kronos_logLevelStrings[i])){
@@ -73,6 +130,7 @@ static unsigned int get_logLevel(GKeyFile *configFile, const char *group,
   }
   
   return KRONOS_INVALID_LEVEL;
+#endif
 }
 
 static ConfigNode *get_config(GKeyFile *configFile, const char *group, 
@@ -105,7 +163,7 @@ uint8_t kronos_get_indexFromMod(const char *mod){
   return 0;
 }
 
-uint8_t kronos_get_logLevelFromMod(const char *mod){
+uint16_t kronos_get_logLevelFromMod(const char *mod){
   ConfigNode *node = NULL;
   list_for_each(node, m_config){
     if(!strcasecmp(mod, node->mod)){
@@ -115,7 +173,7 @@ uint8_t kronos_get_logLevelFromMod(const char *mod){
   return KRONOS_INVALID_LEVEL;
 }
 
-uint8_t kronos_get_logLevelFromIndex(unsigned int index){
+uint16_t kronos_get_logLevelFromIndex(unsigned int index){
   ConfigNode *node = NULL;
   list_for_each(node, m_config){
     if (node->index == index){
@@ -166,4 +224,10 @@ KRONOS_RET kronos_processConfig(const char *configFile, const char *group){
 
 kronos_bool kronos_isLogEnabled(){
   return logEnabled;
+}
+
+kronos_bool kronos_isLoggingRequired(const char* module, uint8_t level){
+  uint16_t logLevel = kronos_get_logLevelFromMod(module);
+  
+  return (logLevel & (1 << level)) ? K_TRUE:K_FALSE;
 }

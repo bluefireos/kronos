@@ -41,11 +41,19 @@ static KRONOS_RET kronos_logInit(){
   return ret;
 }
 
+static kronos_bool isLogRequired(const char *module, KRONOS_logLevel level){
+  return kronos_isLoggingRequired(module, level); 
+}
+
 static log4c_category_t* cachedCategory[100] = {NULL};
 
 static void log_message(KRONOS_logLevel level, const char * module,
     const char *format, va_list message){
   int moduleIndex = kronos_get_indexFromMod(module);
+  
+  if(K_FALSE == isLogRequired(module, level)){
+    return;
+  }
   if(NULL == cachedCategory[moduleIndex]){
     cachedCategory[moduleIndex] = log4c_category_get(module);
   }

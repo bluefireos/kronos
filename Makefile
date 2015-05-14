@@ -1,7 +1,5 @@
 include Makefile.conf
 
-CC         = $(TOOLCHAIN)$(CC_PREFIX)gcc$(CC_SUFIX)
-STRIP      = $(TOOLCHAIN)/$(CC_PREFIX)strip$(CC_SUFIX)
 
 SRC_DIR    = ./src
 INC_DIR    = ./include
@@ -41,7 +39,9 @@ distclean:
 
 $(LIBRARY): $(OBJECTS)
 	@echo "[LD] $(OBJECTS)"
-	@$(CC) $(OBJECTS) $(LFLAGS) $(LIBS_PATHS) -o $@
+	@$(CC) -shared $(OBJECTS) $(LFLAGS) $(LIBS_PATHS) -o $@
 	@ln -s $(LIB_NAME)  $(SOFT_NAME)
 	@mv $(SOFT_NAME) $(LIB_DIR)
 
+tests:
+	make -C test
