@@ -48,17 +48,15 @@ static kronos_bool isLogRequired(const char *module, KRONOS_logLevel level){
 static log4c_category_t* cachedCategory[100] = {NULL};
 
 static void log_message(KRONOS_logLevel level, const char * module,
-    const char *format, va_list message){
+    const char *format, va_list list){
   int moduleIndex = kronos_get_indexFromMod(module);
-  
   if(K_FALSE == isLogRequired(module, level)){
     return;
   }
   if(NULL == cachedCategory[moduleIndex]){
     cachedCategory[moduleIndex] = log4c_category_get(module);
   }
-
-  log4c_category_log(cachedCategory[moduleIndex], (level * 100), format, message);
+  log4c_category_vlog(cachedCategory[moduleIndex], (level * 100), format, list);
 }
 
 /*============================================================================*/
@@ -85,6 +83,8 @@ void  kronos_log(KRONOS_logLevel level, const char * module,
     const char * message, ...){
   va_list args;
   va_start(args, message);
+  //printf("%s\n", message);
+  //printf("%s\n", args);
 
   if(kronos_isLogEnabled()){
       if (level <= kronos_get_logLevelFromMod(module)){

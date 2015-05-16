@@ -80,7 +80,7 @@ static uint16_t processLogLevel(char* logString){
       space = endPointer + 1;
     }
     word_length = space - traversePointer;
-    if( 5 > word_length){
+    if( 4 > word_length){
       traversePointer = space + 1;
       continue;
     }
@@ -214,7 +214,7 @@ KRONOS_RET kronos_processConfig(const char *configFile, const char *group){
     return KRONOS_FAILED;
   }
   m_config = get_config(confFile, group, keys, size);
-  dump_nodes(m_config);
+  //dump_nodes(m_config);
 
   g_strfreev(keys);
   g_key_file_free(confFile);
