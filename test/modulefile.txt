@@ -1,2 +1,9 @@
-[2015:05:14 20:17:44][FATAL][test.jim][5979]®†Ð…
-[2015:05:14 20:17:44][TRACE][test.jim][5979]®†Ð…
+[2015:05:18 17:09:56][FATAL][test.jim][7921]Test
+[2015:05:18 17:09:56][ALERT][test.jim][7921]Test
+[2015:05:18 17:09:56][CRIT ][test.jim][7921]Test
+[2015:05:18 17:09:56][ERROR][test.jim][7921]Test
+[2015:05:18 17:09:56][WARN ][test.jim][7921]Test
+[2015:05:18 17:09:56][NOTICE][test.jim][7921]Test
+[2015:05:18 17:09:56][INFO ][test.jim][7921]Test
+[2015:05:18 17:09:56][DEBUG][test.jim][7921]Test
+[2015:05:18 17:09:56][TRACE][test.jim][7921]Test
