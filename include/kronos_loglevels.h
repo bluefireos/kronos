@@ -1,3 +1,24 @@
+/*
+  This file is part of libkronos.
+
+  Libkronos is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Libkronos is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with Libkronos.  If not, see <http://www.gnu.org/licenses/>.
+
+  Contributors:
+    - Johan Saji <innovatorjohan@gmail.com>
+
+*/
+
 #ifndef KRONOS_LOGLEVEL_H
 #define KRONOS_LOGLEVEL_H
 
@@ -36,4 +57,4 @@
 #define MAX_LOG_LEVELS KRONOS_LAST_LOG
 #define KRONOS_INVALID_LEVEL KRONOS_LAST_LOG
 
-#endif
+#endif //KRONOS_LOGLEVEL_H
