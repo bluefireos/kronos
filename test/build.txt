@@ -1,0 +1,1 @@
+gcc test_appender.c -I/media/vinodgm/Build/xperi/bin/include /media/vinodgm/Build/xperi/bin/lib/liblog4c.so
