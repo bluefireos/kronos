@@ -1,8 +1,23 @@
 /*
- *  Part of BFOS(Elixir) project
- *  Author: Johan Saji
- *  Module: Kronos
- */
+  This file is part of libkronos.
+
+  Libkronos is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Libkronos is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with Libkronos.  If not, see <http://www.gnu.org/licenses/>.
+
+  Contributors:
+    - Johan Saji <innovatorjohan@gmail.com>
+
+*/
 
 #include <stdio.h>
 #include <string.h>
@@ -12,7 +27,7 @@
 
 #include "kronos_error.h"
 #include "kronos_types.h"
-#define KRONOS_LOG_STRING
+//#define KRONOS_LOG_STRING
 #include "kronos_loglevels.h"
 #include "kronos_config.h"
 
@@ -41,13 +56,15 @@ static void dump_nodes( ConfigNode *head){
   }
 }
 
-/*static char *firstChar(char *logString){
+#if 0
+static char *firstChar(char *logString){
   char *startPointer = logString;
   while (' ' == *startPointer){
     startPointer++;
   }
   return startPointer;
-}*/
+}
+#endif
 
 static char *endChar(char *logString){
   int length = strlen(logString);

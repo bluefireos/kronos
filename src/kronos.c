@@ -1,8 +1,24 @@
 /*
- *  Part of BFOS(Elixir) project
- *  Author: Johan Saji
- *  Module: Kronos
- */
+  This file is part of libkronos.
+
+  Libkronos is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Libkronos is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with Libkronos.  If not, see <http://www.gnu.org/licenses/>.
+
+  Contributors:
+    - Johan Saji <innovatorjohan@gmail.com>
+
+*/
+
 #include <stdarg.h>
 #include <log4c.h>
 
@@ -61,7 +77,7 @@ static void log_message(KRONOS_logLevel level, const char * module,
 
 /*============================================================================*/
 /*
- * kronos public api
+ * libkronos public api
  * To be called before using any other api
  */
 KRONOS_RET kronos_init(const char *config_file){
@@ -83,8 +99,6 @@ void  kronos_log(KRONOS_logLevel level, const char * module,
     const char * message, ...){
   va_list args;
   va_start(args, message);
-  //printf("%s\n", message);
-  //printf("%s\n", args);
 
   if(kronos_isLogEnabled()){
       if (level <= kronos_get_logLevelFromMod(module)){
